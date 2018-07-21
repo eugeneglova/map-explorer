@@ -32,20 +32,19 @@ export const main = p => {
     const points = rejectVisited(rejectMines(getPointsAround(p)), visited)
     if (!points.length) {
       if (!acc.length) return Object.keys(visited).length
-      const head = acc[acc.length - 1]
+      const head = acc.pop()
       visited[p] = true
-      acc = acc.slice(0, -1)
       p = head
       continue
     }
-    const head = points[0]
-    if (points.length === 1) {
+    const head = points.shift()
+    if (points.length === 0) {
       visited[p] = true
       p = head
       continue
     }
     visited[p] = true
-    acc = acc.concat(points.slice(1))
+    acc = acc.concat(points)
     p = head
   }
 }
