@@ -1,8 +1,4 @@
-export const sum = n =>
-  Math.abs(n)
-    .toString()
-    .split('')
-    .reduce((item, acc) => parseInt(acc, 10) + item, 0)
+export const sum = (n, acc = 0) => (n === 0 ? Math.abs(acc) : sum((n / 10) | 0, acc + (n % 10)))
 
 export const point = (x, y) => [x, y]
 
