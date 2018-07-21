@@ -16,30 +16,45 @@ export const getPointsAround = p => [step(p, top), step(p, right), step(p, botto
 
 export const rejectMines = points => points.filter(p => !isMine(p))
 
+export const isPositive = p => getX(p) >= 0 && getY(p) >= 0
+
+export const filterPositive = points => points.filter(isPositive)
+
 export const isVisited = (p, points) => points[p]
 
 export const rejectVisited = (points, visited) => points.filter(p => !isVisited(p, visited))
+
+export const getAllPoints = p => {
+  const points = [p]
+  const [x, y] = [getX(p), getY(p)]
+  if (x === 0 && y === 0) return points
+  if (x === 0) return points.concat([point(x, -y)])
+  if (y === 0) return points.concat([point(-x, y)])
+  return points.concat([point(x, -y), point(-x, -y), point(-x, y)])
+}
+
+export const getVisitedCount = visited => Object.values(visited).reduce((acc, p) => acc + getAllPoints(p).length, 0)
 
 const visited = {}
 let acc = []
 
 export const main = p => {
   while (true) {
-    const points = rejectVisited(rejectMines(getPointsAround(p)), visited)
+    const points = rejectVisited(rejectMines(filterPositive(getPointsAround(p))), visited)
     if (!points.length) {
-      if (!acc.length) return Object.keys(visited).length
+      if (!acc.length) return getVisitedCount(visited)
       const head = acc.pop()
-      visited[p] = true
+      visited[p] = p
       p = head
       continue
     }
     const head = points.shift()
     if (points.length === 0) {
-      visited[p] = true
+      visited[p] = p
       p = head
       continue
     }
-    visited[p] = true
+    visited[p] = p
     acc = acc.concat(points)
     p = head
   }

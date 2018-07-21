@@ -10,9 +10,12 @@ import {
   step,
   isMine,
   rejectMines,
+  isPositive,
   getPointsAround,
   isVisited,
-  rejectVisited
+  rejectVisited,
+  getAllPoints,
+  getVisitedCount
 } from './main'
 
 test('sum', () => {
@@ -67,6 +70,14 @@ test('rejectMines', () => {
   expect(rejectMines([point(59, -79), point(0, 0), point(29, 29), point(1, 1)])).toEqual([point(0, 0), point(1, 1)])
 })
 
+test('isPositive', () => {
+  expect(isPositive(point(0, 0))).toBeTruthy()
+  expect(isPositive(point(0, 1))).toBeTruthy()
+  expect(isPositive(point(1, 0))).toBeTruthy()
+  expect(isPositive(point(-1, 0))).toBeFalsy()
+  expect(isPositive(point(0, -1))).toBeFalsy()
+})
+
 test('isVisited', () => {
   const visited = { [point(0, 0)]: true, [point(29, 29)]: true, [point(1, 1)]: true }
   expect(isVisited(point(0, 0), visited)).toBeTruthy()
@@ -77,4 +88,18 @@ test('isVisited', () => {
 test('rejectVisited', () => {
   const visited = { [point(0, 0)]: true, [point(29, 29)]: true, [point(1, 1)]: true }
   expect(rejectVisited([point(59, -79), point(0, 0), point(29, 29), point(0, 0)], visited)).toEqual([point(59, -79)])
+})
+
+test('getAllPoints', () => {
+  expect(getAllPoints(point(0, 0))).toEqual([point(0, 0)])
+  expect(getAllPoints(point(0, 1))).toEqual([point(0, 1), point(0, -1)])
+  expect(getAllPoints(point(1, 0))).toEqual([point(1, 0), point(-1, 0)])
+  expect(getAllPoints(point(1, 1))).toEqual([point(1, 1), point(1, -1), point(-1, -1), point(-1, 1)])
+})
+
+test('getVisitedCount', () => {
+  const p1 = point(0, 0)
+  const p2 = point(1, 1)
+  const visited = { [p1]: p1, [p2]: p2 }
+  expect(getVisitedCount(visited)).toBe(5)
 })
