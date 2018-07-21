@@ -24,7 +24,7 @@ test('sum', () => {
 
 test('point', () => {
   const p = point(0, 1)
-  expect(p).toMatchObject({ x: 0, y: 1 })
+  expect(p).toEqual([0, 1])
   expect(p.toString()).toEqual('0,1')
 })
 
@@ -68,10 +68,13 @@ test('rejectMines', () => {
 })
 
 test('isVisited', () => {
-  expect(isVisited(point(0, 1), [point(1, 1), point(0, 1)])).toBeTruthy()
-  expect(isVisited(point(0, 1), [point(1, 1), point(1, 0)])).toBeFalsy()
+  const visited = { [point(0, 0)]: true, [point(29, 29)]: true, [point(1, 1)]: true }
+  expect(isVisited(point(0, 0), visited)).toBeTruthy()
+  expect(isVisited(point(1, 1), visited)).toBeTruthy()
+  expect(isVisited(point(0, 1), visited)).toBeFalsy()
 })
 
 test('rejectVisited', () => {
-  expect(rejectVisited([point(59, -79), point(0, 0), point(29, 29), point(0, 0)], [point(0, 0), point(29, 29), point(1, 1)])).toEqual([point(59, -79)])
+  const visited = { [point(0, 0)]: true, [point(29, 29)]: true, [point(1, 1)]: true }
+  expect(rejectVisited([point(59, -79), point(0, 0), point(29, 29), point(0, 0)], visited)).toEqual([point(59, -79)])
 })
