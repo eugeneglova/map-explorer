@@ -24,7 +24,7 @@ export const isVisited = (p, points) => points[p]
 
 export const rejectVisited = (points, visited) => points.filter(p => !isVisited(p, visited))
 
-export const visited = {}
+const visited = {}
 let acc = []
 
 export const main = p => {
